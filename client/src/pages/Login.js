@@ -1,20 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as ROUTES from '../constants/routes';
+import { testToken } from '../service/tokenService';
 
 
-
-function Login() {
+export default function Login({token, setToken}) {
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
-    const [remember, setRemember] = useState(false);
+    // const [remember, setRemember] = useState(false);
     const [error, setError] = useState('');
-
     const history = useHistory();
-    const handleLogin = async (event) => {
+
+    useEffect(() =>{
+        document.title = 'Login - Priori';
+        if (token){
+            testToken(token.token_string)
+            .then(data =>{
+                if (data){
+                    history.push(ROUTES.DASHBOARD);
+                }
+            });
+        }
+    },[]);
+
+    const handleLogin = async (event ) => {
         event.preventDefault();
         var status;
-        try {
             fetch("/login", {
                 method: "POST",
                 headers: {
@@ -33,23 +44,18 @@ function Login() {
                     setEmailAddress('');
                     setPassword('');
                     setError(data[0].msg);
+                    localStorage.removeItem("token");
                 }
                 else{
                     // data will be the token upon success
-                    console.log(data);
+                    console.log("return a token in Login");
+                    localStorage.setItem("token", data);
+                    setToken(data);
                     history.push(ROUTES.DASHBOARD);
                 }
             })
-        } catch (error) {
-            setError(error.message);
-        }
     };
 
-
-
-    useEffect(() => {
-        document.title = 'Login - Priori';
-    }, []);
     return (
         <div className="App">
             <div className="App-header">
@@ -89,5 +95,3 @@ function Login() {
         </div>
     );
 }
-
-export default Login;

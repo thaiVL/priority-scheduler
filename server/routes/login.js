@@ -6,10 +6,10 @@ const router = express.Router();
 const db = require("../controller/mysqldb");
 
 const loginLogic = require("../controller/loginLogic");
+const tok = require("../controller/token")
 
 
-
-router.get("/test", loginLogic.verifyToken, (req, res) => {
+router.get("/test", tok.verifyToken, (req, res) => {
     // console.log("Hi, you're in");
     res.json("Hi you're in test route of login rn");
 })

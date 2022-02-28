@@ -10,6 +10,7 @@ const db = require("./controller/mysqldb");
 
 const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
+const dashboardRoute = require("./routes/dashboard")
 
 app.use(bodyparser.urlencoded({extended:true}));
 app.use(bodyparser.json());
@@ -31,6 +32,6 @@ app.get("/test", (req, res) => {
 })
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
-
+app.use("/dashboard", dashboardRoute);
 
 app.listen(port, () => {console.log(`Server on port ${port}`)})

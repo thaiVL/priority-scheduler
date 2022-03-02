@@ -8,17 +8,43 @@ async function getTimebank(userID){
             if(err){
                 errors.push({msg: err})
                 console.log(err)
-                reject(errors);
-                return;
+                // reject(errors);
+                // return;
             }
             if(result.length === 0){
-                errors.push({msg: "User doesn't exist"})
-                reject(errors)
-                return;
+                errors.push({msg: "User doesn't exist"});
+                // reject(errors)
+                // return;
             }
-            resolve(result[0])
+            if(errors.length > 0){
+                reject(errors);
+            }
+            resolve(result[0]);
+            return;
         })
     })
 }
 
-module.exports = {getTimebank};
+async function changeTimeBank(userID, newTimes){
+    return new Promise((reject, resolve) => {
+        errors = [];
+        query = `UPDATE usertimebank 
+        SET mon='${newTimes.mon}', tues='${newTimes.tues}', weds='${newTimes.weds}', thurs='${newTimes.thurs}', fri='${newTimes.fri}', sat='${newTimes.sat}', sun='${newTimes.sun}'
+        WHERE userID='${userID}'`
+        db.query(query, (err, result) => {
+            if(err){
+                errors.push({msg: err});
+                console.log(err);
+            }
+            if(result.length === 0){
+                errors.push({msg: "User doesn't exist"});
+            }
+            if(errors.length > 0){
+                reject(errors);
+            }
+            resolve(result[0]);
+        })
+    })
+}
+
+module.exports = {getTimebank, changeTimeBank};

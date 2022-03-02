@@ -18,7 +18,7 @@ router.get("/user", tok.verifyToken, (req, res) => {
 })
 
 router.get("/timeBank/view", tok.verifyToken, (req, res) => {
-    userID = req.user.user.userID;
+    var userID = req.user.user.userID;
     timebank.getTimebank(userID)
     .then(resolve => {
         //console.log(resolve)
@@ -34,7 +34,15 @@ router.get("/timeBank/view", tok.verifyToken, (req, res) => {
 
 // TO DO
 router.put("/timeBank/update", tok.verifyToken, (req, res) => {
-
+    timebank.changeTimeBank(req.user.user.userID, req.body)
+    .then(resolve => {
+        res.status(200).json("Success");
+        return;
+    })
+    .catch(reject => {
+        res.json(reject);
+        return;
+    })
 })
 
 // get all classes (sort by param)

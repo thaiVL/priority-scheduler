@@ -25,6 +25,10 @@ router.post("/", (req, res) => {
             email: resolve.email
         }
         jwt.sign({user}, "superSecretKey",{ expiresIn: "1d" } ,(err, token) => {
+                if(err){
+                    res.status(402).json({msg: err});
+                    return;
+                }
                 res.status(200).json(token);
                 return;
         })

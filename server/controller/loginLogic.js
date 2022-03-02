@@ -1,5 +1,4 @@
 const db = require("../controller/mysqldb");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 async function userCheck(data){

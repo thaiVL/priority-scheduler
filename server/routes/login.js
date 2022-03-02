@@ -17,9 +17,9 @@ router.get("/test", tok.verifyToken, (req, res) => {
 router.post("/", (req, res) => {
     loginLogic.userCheck(req.body)
     .then(resolve => {
-
         const user = {
             name: resolve.name,
+            userID: resolve.userID,
             studentID: resolve.studentID,
             school: resolve.school,
             email: resolve.email

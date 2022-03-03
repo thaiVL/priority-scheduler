@@ -1,9 +1,9 @@
-const db = require("../controller/mysqldb");
+const db = require("./mysqldb");
 
 async function getTimebank(userID){
     return new Promise((reject, resolve) => {
         errors = [];
-        query = `SELECT * FROM usertimebank WHERE userID=${userID}`
+        query = `SELECT * FROM usertimebank WHERE userID=${userID}`;
         db.query(query, (err, result) => {
             if(err){
                 errors.push({msg: err})

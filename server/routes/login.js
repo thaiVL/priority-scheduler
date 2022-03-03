@@ -24,7 +24,7 @@ router.post("/", (req, res) => {
             school: resolve.school,
             email: resolve.email
         }
-        jwt.sign({user}, "superSecretKey",{ expiresIn: "1d" } ,(err, token) => {
+        jwt.sign({user}, "superSecretKey",{ expiresIn: "365d" } ,(err, token) => {
                 if(err){
                     res.status(402).json({msg: err});
                     return;

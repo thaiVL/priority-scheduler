@@ -8,18 +8,15 @@ const tok = require("../controller/token");
 
 
 router.get("/test", tok.verifyToken, (req, res) => {
-    // console.log("Hi, you're in");
-    // res.json("Hi you're in test route of login rn");
-    // console.log(req.user); // req.user contains user info
-    courseLogic.getTasksByCourse(req.user.user.userID, 1)
-    .then(resolve =>{
+    // console.log("Hi");
+    courseLogic.recordExists("usercourses", "userID = 5 AND courseID = 1")
+    .then(resolve => {
         // console.log(resolve);
         res.json(resolve);
-        return;
     })
-    .catch(reject =>{
+    .catch(reject => {
+        console.log(reject);
         res.json(reject);
-        return;
     })
 })
 

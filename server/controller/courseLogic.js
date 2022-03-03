@@ -1,6 +1,22 @@
 const db = require("./mysqldb");
 
-// async function existsAlready(tableName, )
+async function recordExists(tableName, conditions){
+    return new Promise((resolve, reject) => {
+        errors = []
+        query = `SELECT EXISTS(SELECT * FROM ${tableName} WHERE ${conditions});`
+        db.query(query, (err, result) => {
+            if(err){
+                errors.push({msg: err});
+                reject(errors);
+                return;
+            }
+            key = Object.keys(result[0]);
+            resolve(result[0][key]);
+            return;
+        })
+    })
+
+}
 
 async function getTasksByCourse(userID, courseID){
     return new Promise((resolve, reject) => {
@@ -84,16 +100,31 @@ async function setImportance(userID, courseID, importance){
 
 async function addCourse(userID, courseID, importance){
     return new Promise((resolve, reject) => {
-        errors = [];
-        query = `INSERT INTO usercourses (userID, courseID, courseImportance) VALUES ('${userID}', '${courseID}', '${importance}')`;
-        db.query(query, (err, result) => {
-            if(err){
-                errors.push({msg: err});
-                reject(errors);
+        recordExists("usercourses", `userID='${userID}' AND courseID='${courseID}'`)
+        .then(suc => {
+            if(suc === 1){
+                reject({msg: "User already in this course"});
                 return;
             }
-            resolve("Successfully added course");
+            else{
+                errors = [];
+                query = `INSERT INTO usercourses (userID, courseID, courseImportance) VALUES ('${userID}', '${courseID}', '${importance}')`;
+                db.query(query, (err, result) => {
+                    if(err){
+                        errors.push({msg: err});
+                        reject(errors);
+                        return;
+                    }
+                    resolve("Successfully added course");
+                    return;
+                })
+            }
         })
+        .catch(fail => {
+            reject(fail);
+            return;
+        })
+
     })
 }
 

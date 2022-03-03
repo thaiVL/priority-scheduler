@@ -46,9 +46,38 @@ function Signup({token, setToken}) {
                 setErr(data[0].msg);
             }
             else{
-                // redirect to successful page
                 console.log("Account created!");
-                history.push(ROUTES.DASHBOARD);
+                // redirect to successful page
+                var status;
+                fetch("/login", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({email: detail.email, password: detail.password})
+                })
+                .then(res => {
+                    status = res.status
+                    return res.json();
+                })
+                .then(data => {
+                    if(status !== 200){
+                        console.log(data[0].msg);
+                        setDetail({...detail, email:''});
+                        setDetail({...detail, password: ''});
+                        setDetail({...detail, passwordConfirm: ''});
+                        setErr(data[0].msg);
+                        localStorage.removeItem("token");
+                    }
+                    else{
+                        // data will be the token upon success
+                        console.log("return a token in Login");
+                        localStorage.setItem("token", data);
+                        setToken(data);
+                        history.push(ROUTES.DASHBOARD);
+                    }
+                })
             }
         })
         

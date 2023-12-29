@@ -1,4 +1,4 @@
-# CMPT 370 - Project - Group 27
+# Deadline Priority Scheduler Project
 
 # to run the program 
 npm run dev
